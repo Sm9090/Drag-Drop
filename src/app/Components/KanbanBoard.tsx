@@ -186,10 +186,13 @@ function KanbanBoard() {
     }
 
     return (
-        <div className='m-auto flex  flex-wrap justify-center p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden   bg-gradient-to-r from-purple-500 to-pink-500'>
+        <div className='m-auto flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden   bg-gradient-to-r from-purple-500 to-pink-500'>
             <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
+                <div className='basis-full m-4'>
+                    <Input onAddItem={onAddItem} />
+                </div>
                 <div>
-                    <div className='flex gap-4'>
+                    <div className='flex flex-wrap gap-4'>
                         <SortableContext items={columnId}>
                             {columns.map((col, ind) => {
                                 return <div key={ind}>
@@ -206,14 +209,12 @@ function KanbanBoard() {
                 </div>
                 <button
                     onClick={createNewColumn}
-                    className='flex gap-2 justify-center items-center ml-2 rounded-lg w-[300px] h-[40px] bg-slate-100 hover:bg-slate-200'
+                    className='flex gap-2 justify-center items-center ml-2 rounded-lg w-[300px] h-[40px] bg-slate-100 hover:bg-slate-200 m-4'
                 >
                     <PlusIcon />
                     Add Column
                 </button>
-                <div>
-                    <Input onAddItem={onAddItem} />
-                </div>
+                
                 {createPortal(
                     <DragOverlay>
                         {activeColumn && <ColumnContainer column={activeColumn} deleteColumn={deleteColumn} updateColumn={updateColumn}

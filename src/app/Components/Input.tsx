@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import PlusIcon from '../Icons/plusIcon';
 
 interface InputProps {
     onAddItem: (text: string, selectedOption: string) => void;
@@ -43,8 +44,8 @@ function Input({ onAddItem }: InputProps) {
                             <ArrowDropDownIcon />
                         </button>
                     </div>
-                    <button onClick={addItemToCard} className="bg-transparent hover:bg-emerald-500  font-semibold hover:text-white py-2 px-4 border border-emerald-500 hover:border-transparent rounded-xl ml-2">
-                        Add Item
+                    <button onClick={addItemToCard} className="bg-slate-100 hover:bg-slate-200  hover:transition py-2 px-4 hover:border-transparent rounded-xl ml-2 text-sm">
+                        Add Task
                     </button>
                 </div>
                 {toggleMenu &&
