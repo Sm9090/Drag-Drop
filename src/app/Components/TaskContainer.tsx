@@ -1,9 +1,9 @@
-import { Task, Id } from "./types/types"
-import TrashIcon from "../Icons/trashIcon"
 import { useState } from "react"
-import { DndContext } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+
+import { Task, Id } from "./types/types"
+import TrashIcon from "../Icons/trashIcon"
 
 interface Props {
     task: Task
@@ -50,7 +50,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
     }
     if (editMode) {
         return <div onClick={toggleEditMode}
-            className=" bg-emerald-300 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center flex justify-between "
+            className=" bg-slate-400 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center flex justify-between "
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
             ref={setNodeRef}
@@ -59,7 +59,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
             {...listeners}
 
         >
-            <textarea className="h-[90%] bg-transparent w-full resize-none border-none rounded text-white focus:outline-none "
+            <textarea className="max-h-max bg-transparent w-full resize-none border-none rounded text-white focus:outline-none "
                 value={task.content}
                 autoFocus onBlur={toggleEditMode} placeholder="Task content here
            "onKeyDown={(e) => {
@@ -73,7 +73,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
         <div onClick={toggleEditMode}
             ref={setNodeRef} style={style}
             {...attributes} {...listeners}
-            className=" bg-yellow-300 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center flex justify-between "
+            className=" bg-slate-300 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center flex justify-between "
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
         >

@@ -1,30 +1,32 @@
-import React, { useMemo, useState } from 'react'
-import { Column, Id, Task } from './types/types'
-import TrashIcon from '../Icons/trashIcon'
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import PlusIcon from '../Icons/plusIcon'
+import React, { useMemo, useState } from 'react'
+
+
+import { Column, Id, Task } from './types/types'
+import TrashIcon from '../Icons/trashIcon'
 import TaskContainer from './TaskContainer'
 
 
 interface Props {
     column: Column
     deleteColumn: (id: Id) => void
-    updateColumn: (id: Id , title: string) => void;
+    updateColumn: (id: Id, title: string) => void;
     deleteTask: (id: Id) => void
     createTask: (columnId: Id) => void;
-    updateTask: (id:Id ,content: string) => void
+    updateTask: (id: Id, content: string) => void
     task: Task[]
 
 }
 
 function ColumnContainer(props: Props) {
-    const { column, deleteColumn ,updateColumn ,createTask ,task ,deleteTask ,updateTask} = props
-    const [ editMode, setEditMode ] = useState(false)
-    const taskIds = useMemo(()=> {
+    const { column, deleteColumn, updateColumn, createTask, task, deleteTask, updateTask } = props
+    const [editMode, setEditMode] = useState(false)
+    const taskIds = useMemo(() => {
         return task.map(task => task.id)
-    },[task])
-   
+    }, [task])
+
 
     const { setNodeRef, attributes, listeners, transform, transition, isDragging }: any = useSortable({
         id: column.id,
@@ -44,14 +46,14 @@ function ColumnContainer(props: Props) {
     if (isDragging) {
         return (
             <div
-            ref={setNodeRef}
-            style={style}
-             className='flex flex-col justify-between text-center
-              h-[400px] w-[300px] bg-emerald-500 opacity-60 
+                ref={setNodeRef}
+                style={style}
+                className='flex flex-col justify-between text-center
+              h-[400px] w-[300px] bg-slate-300 opacity-60 
               border-2 border-rose-500'
-             >
+            >
                 {column.title}
-             </div>
+            </div>
         )
     }
 
@@ -61,21 +63,20 @@ function ColumnContainer(props: Props) {
 
 
     return (
-        <div className='flex flex-col justify-between text-center h-[400px] w-[300px] bg-emerald-500 opacity-100' ref={setNodeRef} style={style}>
+        <div className='flex flex-col justify-between text-center max-h-[400px] w-[300px] bg-slate-200 opacity-100 rounded-lg' ref={setNodeRef} style={style}>
             {/* column title */}
             <div className='flex justify-between p-2 m-2 cursor-grab' {...attributes} {...listeners}>
                 <div className='flex gap-2'>
-                    <div className=' rounded-full text-sm flex justify-center items-center  bg-slate-400 px-2 py-1'>0</div>
                     <div onClick={handleEditing}>
-                        {editMode ? <input className='bg-transparent' type="text" 
-                        value={column.title}
-                        onChange={(e) =>updateColumn( column.id , e.target.value )}
-                         autoFocus onBlur={() =>{
-                            setEditMode(false)
-                        }} onKeyDown={(e) =>{
-                            if(e.key !== "Enter") return;
-                            setEditMode(false)
-                        }}/>
+                        {editMode ? <input className='bg-transparent' type="text"
+                            value={column.title}
+                            onChange={(e) => updateColumn(column.id, e.target.value)}
+                            autoFocus onBlur={() => {
+                                setEditMode(false)
+                            }} onKeyDown={(e) => {
+                                if (e.key !== "Enter") return;
+                                setEditMode(false)
+                            }} />
                             :
                             column.title}
                     </div>
@@ -87,23 +88,23 @@ function ColumnContainer(props: Props) {
                 </button>
             </div>
             {/* //column task container */}
-            <div className='h-full'>
+            <div className='overflow-y-auto'>
                 <SortableContext items={taskIds}>
-                {task.map((task)=>{
-                   return <div  className='' > 
-                   <TaskContainer  key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask}/>
-                   </div>
-                })}
+                    {task.map((task) => {
+                        return <div className='' >
+                            <TaskContainer key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
+                        </div>
+                    })}
                 </SortableContext>
             </div>
             {/* column footer  */}
             <div className='m-2 w-[100%]'>
-                <button 
-                onClick={() => {
-                    createTask(column.id)
-                    console.log('Add Task',column.id)
-                }}
-                className='flex gap-2 items-center  justify-center'>
+                <button
+                    onClick={() => {
+                        createTask(column.id)
+                        console.log('Add Task', column.id)
+                    }}
+                    className='flex gap-2 items-center  justify-center'>
                     <PlusIcon />
                     Add Task
                 </button>
