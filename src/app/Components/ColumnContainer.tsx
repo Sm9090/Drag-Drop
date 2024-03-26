@@ -22,6 +22,7 @@ interface Props {
 
 function ColumnContainer(props: Props) {
     const { column, deleteColumn, updateColumn, createTask, task, deleteTask, updateTask } = props
+    console.log(column)
     const [editMode, setEditMode] = useState(false)
     const taskIds = useMemo(() => {
         return task.map(task => task.id)

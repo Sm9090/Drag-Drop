@@ -1,17 +1,24 @@
 'use client'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { DndContext, DragOverlay, useSensors, useSensor, PointerSensor, DragOverEvent, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 
 import PlusIcon from '../Icons/plusIcon'
 import { Column, Id, Task } from './types/types'
 import ColumnContainer from './ColumnContainer'
 import TaskContainer from './TaskContainer';
 import Input from './Input';
+import {onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc } from 'firebase/firestore';
+import { auth, getUser ,db } from '../Config/firebase';
+
+
 
 
 function KanbanBoard() {
+
 
     const [columns, setColumns] = useState<Column[]>([
         { id: 1, title: "Do" },
@@ -21,6 +28,37 @@ function KanbanBoard() {
     const [task, setTasks] = useState<Task[]>([])
     const [activeColumn, setActiveColumn] = useState<Column | null>()
     const [activeTask, setActiveTask] = useState<Task | null>()
+    const [currentUser ,setCurrentUser] = useState<any>(null)
+
+    useEffect(() => {
+        const loggedUser = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                const uid = user.uid;
+                const userData = await getUser(uid)
+                setCurrentUser(userData)
+            } else {
+                // User is signed out
+                setCurrentUser(null);
+            }
+        });
+        return () => loggedUser();
+    }, []);
+
+
+    useEffect(() => {
+        const saveData = async () => {
+            if (currentUser) {
+                const uid = currentUser.uid;
+                const userDocRef = doc(db, "users", uid);
+                await updateDoc(userDocRef, {
+                    columns: columns,
+                    tasks: task
+                });
+            }
+        };
+        saveData();
+    }, [columns, task, currentUser]);
 
     const columnId = useMemo(() => columns.map((col) => col.id), [columns])
     console.log('columnId ==>', columnId)
@@ -187,6 +225,9 @@ function KanbanBoard() {
 
     return (
         <div className='m-auto flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden   bg-gradient-to-r from-purple-500 to-pink-500'>
+            <div>
+                {currentUser && currentUser.name}
+            </div>
             <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
                 <div className='basis-full m-4'>
                     <Input onAddItem={onAddItem} />
@@ -214,7 +255,7 @@ function KanbanBoard() {
                     <PlusIcon />
                     Add Column
                 </button>
-                
+
                 {createPortal(
                     <DragOverlay>
                         {activeColumn && <ColumnContainer column={activeColumn} deleteColumn={deleteColumn} updateColumn={updateColumn}
@@ -229,6 +270,11 @@ function KanbanBoard() {
                     document.body
                 )}
             </DndContext>
+            <div>
+                <button>
+                    <Link href='./Views/Login'>Login</Link>
+                </button>
+            </div>
         </div>
     )
 }
