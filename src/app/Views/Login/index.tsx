@@ -4,6 +4,13 @@ import { useState } from "react"
 
 import { SignIn } from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+
+
+
+import TrelloPng from '../../Icons/Trello_logo.svg.png'
+import toast from "react-hot-toast"
+
 
 
 
@@ -20,18 +27,19 @@ export default function Login() {
             await SignIn({ email, password })
             setEmail('')
             setPassword('')
-            alert('Login Sucessfully')
+            toast.success('Login Sucessfully')
             router.push('/')
         } catch (error: any) {
-            alert(error.message)
+            toast.error(error.message)
         }
     }
 
 
     return (
-        <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="min-h-full h-screen bg-gradient-to-r from-pink-500 to-blue-500 flex items-center justify-center">
+            <div className="flex  flex-1 flex-col justify-center mx-6  px-6 py-12 lg:px-8 backdrop-blur-sm bg-white/20  max-w-sm rounded-lg ">
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm ">
+                <Image className="mx-auto h-10 w-auto" src={TrelloPng} alt="Your Company" />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Sign in to your account
                     </h2>
@@ -98,6 +106,6 @@ export default function Login() {
                     </p>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

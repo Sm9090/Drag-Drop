@@ -22,7 +22,6 @@ interface Props {
 
 function ColumnContainer(props: Props) {
     const { column, deleteColumn, updateColumn, createTask, task, deleteTask, updateTask } = props
-    console.log(column)
     const [editMode, setEditMode] = useState(false)
     const taskIds = useMemo(() => {
         return task.map(task => task.id)
@@ -49,8 +48,8 @@ function ColumnContainer(props: Props) {
             <div
                 ref={setNodeRef}
                 style={style}
-                className='flex flex-col justify-between text-center
-              h-[400px] w-[300px] bg-slate-300 opacity-60 
+                className=' justify-between text-center
+               bg-slate-300 opacity-60 h-[300px]   w-[250px]
               border-2 border-rose-500'
             >
                 {column.title}
@@ -64,9 +63,9 @@ function ColumnContainer(props: Props) {
 
 
     return (
-        <div className='flex flex-col justify-between text-center max-h-[400px] w-[300px] bg-slate-200 opacity-100 rounded-lg' ref={setNodeRef} style={style}>
+        <div className='flex flex-col justify-between text-center h-[300px] w-[250px]  opacity-100 rounded-lg  bg-gray-200 my-4 px-2 text-sm' ref={setNodeRef} style={style}>
             {/* column title */}
-            <div className='flex justify-between p-2 m-2 cursor-grab' {...attributes} {...listeners}>
+            <div className='flex justify-between p-2 m-2 cursor-grab border-b border-gray-100' {...attributes} {...listeners}>
                 <div className='flex gap-2'>
                     <div onClick={handleEditing}>
                         {editMode ? <input className='bg-transparent' type="text"

@@ -3,6 +3,8 @@ import Link from "next/link"
 import { useState } from "react"
 import {Register} from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+import TrelloPng from '../../Icons/Trello_logo.svg.png'
 
 
 export default function SignUp() {
@@ -33,21 +35,22 @@ export default function SignUp() {
 
 
     return (
-      <>
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="min-h-full  bg-gradient-to-r from-pink-500 to-blue-500 flex items-center justify-center">
+            <div className="flex  flex-1 flex-col justify-center my-5  px-6 py-6 lg:px-8 backdrop-blur-sm bg-white/20  max-w-sm rounded-lg ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-             Create An Account
+          <Image className="mx-auto h-10 w-auto" src={TrelloPng} alt="Your Company" />
+            <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+             Create  Account
             </h2>
           </div>
   
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
             <div>
                 <label htmlFor="fullName" className="block text-sm font-medium leading-6 text-gray-900">
                   FullName
                 </label>
-                <div className="mt-2">
+                <div className="mt-1">
                   <input
                     id="fullName"
                     name="fullName"
@@ -64,7 +67,7 @@ export default function SignUp() {
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Email address
                 </label>
-                <div className="mt-2">
+                <div className="mt-1">
                   <input
                     id="email"
                     name="email"
@@ -81,7 +84,7 @@ export default function SignUp() {
                 <label htmlFor="number" className="block text-sm font-medium leading-6 text-gray-900">
                   Phone Number
                 </label>
-                <div className="mt-2">
+                <div className="mt-1">
                   <input
                     id="number"
                     name="number"
@@ -102,7 +105,7 @@ export default function SignUp() {
                     Password
                   </label>
                 </div>
-                <div className="mt-2">
+                <div className="mt-1">
                   <input
                     id="password"
                     name="password"
@@ -126,7 +129,7 @@ export default function SignUp() {
               </div>
             </form>
   
-            <p className="mt-10 text-center text-sm text-gray-500">
+            <p className="mt-5 text-center text-sm text-gray-500">
               Already have an Account?{' '}
               <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                 <Link href='./Login'>SignIn</Link>
@@ -134,7 +137,7 @@ export default function SignUp() {
             </p>
           </div>
         </div>
-      </>
+      </div>
     )
   }
   
