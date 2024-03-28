@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getDatabase , ref, set ,get } from "firebase/database"
 
 const firebaseConfig = {
     apiKey: "AIzaSyD5oHZ2MU6pqQiWhL5se9QWa4FnTXqL2GI",
@@ -17,7 +17,8 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const auth = getAuth()
-export const db = getFirestore(app);
+// export const db = getFirestore(app);
+export const db = getDatabase(app)
 
 interface Props {
     email: string,
@@ -35,12 +36,13 @@ interface Login {
 export async function Register({ email, password, phoneNumber, name }: Props) {
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password)
     try {
-        const userRef = await setDoc(doc(db, "users", uid), {
+        const userRef = ref(db, `users/${uid}`);
+        await set(userRef, {
             name,
             phoneNumber,
             email
         });
-        console.log(uid)
+        console.log('added in database ', uid)
     } catch (e: any) {
         console.log(e.message)
     }
@@ -57,13 +59,12 @@ export async function SignIn({ email, password }: Login) {
 
 
 export const getUser = async (uid: any) => {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        const user = docSnap.data()
-        return user
+    const userRef = ref(db, `users/${uid}`);
+    const userSnap = await get(userRef);
+    if (userSnap.exists()) {
+        const user = userSnap.val();
+        return user;
     } else {
-        // docSnap.data() will be undefined in this case
         console.log("No such document!");
     }
 

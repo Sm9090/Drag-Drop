@@ -13,11 +13,12 @@ import TaskContainer from './TaskContainer';
 import Input from './Input';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc } from 'firebase/firestore';
+import { ref, update ,onValue } from "firebase/database";
 import { auth, getUser, db } from '../Config/firebase';
 import TrelloPng from '../Icons/Trello_logo.svg.png'
 import Image from 'next/image';
 import { ArrowDropDown } from '@mui/icons-material';
-import {AccountMenu , MenuListComposition} from './AccountMenu';
+import { AccountMenu, MenuListComposition } from './AccountMenu';
 
 
 
@@ -42,18 +43,23 @@ function KanbanBoard() {
             if (user) {
                 // User is signed in
                 const uid = user.uid;
+                console.log(uid)
                 setUserId(uid)
-                const userData = await getUser(uid)
-                setCurrentUser(userData)
-                if(userData){
-                setColumns(userData.columns || [])
-                setTasks(userData.tasks || [])
-                }
-            } else {
-                // User is signed out
+                // const userData = await getUser(uid)
+                // console.log('come from real time db',userData)
+                const userRef = ref(db, `users/${uid}`);
+                onValue(userRef, (snapshot) => {
+                    const userData = snapshot.val();
+                    setCurrentUser(userData);
+                    if (userData) {
+                        setColumns(userData.columns || []);
+                        setTasks(userData.tasks || []);
+                    }
+                });
+            }else{
                 router.push('./Views/Login')
-                setCurrentUser(null);
-                setUserId(null)
+                    setCurrentUser(null);
+                    setUserId(null)
             }
         });
         return () => loggedUser();
@@ -63,23 +69,25 @@ function KanbanBoard() {
     useEffect(() => {
         const saveData = async () => {
             if (userId) {
-                const uid = userId
-                const userDocRef = doc(db, "users", uid);
-                // console.log('userDocRef',userDocRef)
-                const docUpdate = await updateDoc(userDocRef, {
-                    columns: columns,
-                    tasks: task
-                });
-                console.log(docUpdate)
+                const uid = userId;
+                const userRef = ref(db, `users/${uid}`);
+                try {
+                    await update(userRef, {
+                        columns: columns,
+                        tasks: task
+                    });
+                    console.log('Data updated successfully');
+                } catch (error) {
+                    console.error('Error updating data:', error);
+                }
+            } else {
+                console.log('User Not Found');
             }
-            else {
-                console.log('user Not Found')
-            }
-        };
+        }
         saveData();
     }, [columns, task, currentUser]);
 
-    console.log(currentUser)
+    // console.log(currentUser)
 
     const columnId = useMemo(() => columns.map((col) => col.id), [columns])
     console.log('columnId ==>', columnId)
@@ -244,7 +252,7 @@ function KanbanBoard() {
 
     }
 
-    if(!currentUser){
+    if (!currentUser) {
         return <div>loading</div>
     }
 
@@ -252,17 +260,17 @@ function KanbanBoard() {
         <div className='m-auto flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
             <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative'>
                 <div className='hidden max-sm:block absolute right-0 top-3 mr-2'>
-                    <AccountMenu title={currentUser.name}  email={currentUser.email}/>
+                    {/* <AccountMenu  title={currentUser.name} email={currentUser.email} /> */}
                 </div>
                 <div className='flex max-custom:flex-wrap max-custom:justify-center justify-between w-full  items-center border-b border-gray-100 max-sm:text-sm '>
                     <div className='max-custom:basis-full max-custom:flex max-custom:justify-center' >
-                        <Image src={TrelloPng} alt="" className='w-[150px]  ml-2  '/>
+                        <Image src={TrelloPng} alt="" className='w-[150px]  ml-2  ' />
                     </div>
                     <div className='m-4 max-custom:basis-6/12 '>
-                        <Input onAddItem={onAddItem}  />
+                        <Input onAddItem={onAddItem} />
                     </div>
                     <div className=' font-bold bg-white/10 hover:bg-white/30  hover:transition py-2 px-4  rounded-xl ml-2 text-sm text-white max-sm:hidden '>
-                    <MenuListComposition title={currentUser.name}  email={currentUser.email}/>
+                        <MenuListComposition title={currentUser.name} email={currentUser.email} />
                     </div>
                 </div>
                 <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
@@ -280,14 +288,14 @@ function KanbanBoard() {
                                     </div>
                                 })}
                             </SortableContext>
-                    <button
-                        onClick={createNewColumn}
-                        className='flex gap-2 justify-center items-center rounded-lg min-w-[250px] h-[40px] bg-white/10
+                            <button
+                                onClick={createNewColumn}
+                                className='flex gap-2 justify-center items-center rounded-lg min-w-[250px] h-[40px] bg-white/10
                          hover:bg-white/20 mt-4 text-sm text-white'
-                    >
-                        <PlusIcon />
-                        Add another list
-                    </button>
+                            >
+                                <PlusIcon />
+                                Add another list
+                            </button>
                         </div>
                     </div>
 
@@ -305,11 +313,6 @@ function KanbanBoard() {
                         document.body
                     )}
                 </DndContext>
-                {/* <div>
-                    <button>
-                        <Link href='./Views/Login'>Login</Link>
-                    </button>
-                </div> */}
             </div>
         </div>
     )
