@@ -31,7 +31,7 @@ export default function SignUp() {
             setName('')
             setPhoneNumber(null)
             alert('Registered Succefully')
-            // router.push('/Views/Login')
+            router.push('/Views/Login')
           } catch(e:any) {
             alert(e)
           }
