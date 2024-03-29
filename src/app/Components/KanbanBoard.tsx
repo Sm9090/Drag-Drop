@@ -19,6 +19,7 @@ import TrelloPng from '../Icons/Trello_logo.svg.png'
 import Image from 'next/image';
 import { ArrowDropDown } from '@mui/icons-material';
 import { AccountMenu, MenuListComposition } from './AccountMenu';
+import AlertDialogSlide from './Dialog';
 
 
 
@@ -100,7 +101,7 @@ function KanbanBoard() {
         })
     )
 
-    function onAddItem(text: string, selectedOption: string) {
+    function onAddItem(text: string, selectedOption: string ) {
         const selectedColumn = columns.find(column => column.title === selectedOption);
         if (selectedColumn) {
             const newTask: Task = {
@@ -135,10 +136,11 @@ function KanbanBoard() {
         setTasks([...task, newTask])
     }
 
-    function createNewColumn() {
+    function createNewColumn(text :string ) {
+        console.log(text)
 
         const addColumns: Column = {
-            title: `Column ${columns.length + 1}`,
+            title: text,
             id: Math.ceil(Math.random() * 10000)
         }
 
@@ -252,6 +254,9 @@ function KanbanBoard() {
 
     }
 
+
+    
+
     if (!currentUser) {
         return <div>loading</div>
     }
@@ -260,14 +265,14 @@ function KanbanBoard() {
         <div className='m-auto flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
             <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative'>
                 <div className='hidden max-sm:block absolute right-0 top-3 mr-2'>
-                    {/* <AccountMenu  title={currentUser.name} email={currentUser.email} /> */}
+                    <AccountMenu  title={currentUser.name} email={currentUser.email} />
                 </div>
                 <div className='flex max-custom:flex-wrap max-custom:justify-center justify-between w-full  items-center border-b border-gray-100 max-sm:text-sm '>
                     <div className='max-custom:basis-full max-custom:flex max-custom:justify-center' >
                         <Image src={TrelloPng} alt="" className='w-[150px]  ml-2  ' />
                     </div>
                     <div className='m-4 max-custom:basis-6/12 '>
-                        <Input onAddItem={onAddItem} />
+                        <Input onAddItem={onAddItem} columnTitle={columns} />
                     </div>
                     <div className=' font-bold bg-white/10 hover:bg-white/30  hover:transition py-2 px-4  rounded-xl ml-2 text-sm text-white max-sm:hidden '>
                         <MenuListComposition title={currentUser.name} email={currentUser.email} />
@@ -288,14 +293,7 @@ function KanbanBoard() {
                                     </div>
                                 })}
                             </SortableContext>
-                            <button
-                                onClick={createNewColumn}
-                                className='flex gap-2 justify-center items-center rounded-lg min-w-[250px] h-[40px] bg-white/10
-                         hover:bg-white/20 mt-4 text-sm text-white'
-                            >
-                                <PlusIcon />
-                                Add another list
-                            </button>
+                           <AlertDialogSlide createColumn={createNewColumn}/>
                         </div>
                     </div>
 
@@ -313,6 +311,7 @@ function KanbanBoard() {
                         document.body
                     )}
                 </DndContext>
+                
             </div>
         </div>
     )

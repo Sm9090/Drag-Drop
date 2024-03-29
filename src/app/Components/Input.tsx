@@ -1,17 +1,24 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import PlusIcon from '../Icons/plusIcon';
 
 interface InputProps {
     onAddItem: (text: string, selectedOption: string) => void;
+    columnTitle: any
 }
 
-function Input({ onAddItem }: InputProps) {
+function Input({ onAddItem  , columnTitle}: InputProps) {
     const [toggleMenu, setToggleMenu] = useState<boolean>(false)
     const [text, setText] = useState<string>("")
     const [selectedOption, setSelectedOption] = useState<string>("")
+    const [columnsTitle ,setColumnsTitle] = useState([])
+
+    console.log(columnsTitle)
+    useEffect(()=>{
+        setColumnsTitle(columnTitle)
+    },[columnTitle])
 
     const handleMenu = () => {
         setToggleMenu(!toggleMenu)
@@ -29,7 +36,7 @@ function Input({ onAddItem }: InputProps) {
 
     const addItemToCard = () => {
         if (text.trim() !== "" && selectedOption !== "") {
-            onAddItem(text, selectedOption)
+            onAddItem(text, selectedOption )
             setText("")
             setSelectedOption("")
         }
@@ -50,11 +57,11 @@ function Input({ onAddItem }: InputProps) {
                 </div>
                 {toggleMenu &&
                     <div className='relative w-full m-0.5 '>
-                        <ul className='absolute right-0  p-2 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                            <li onClick={() => { handleOptionSelect("Do") }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>Do</li>
-                            <li onClick={() => { handleOptionSelect("Doing") }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>Doing</li>
-                            <li onClick={() => { handleOptionSelect("Complete") }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>Complete</li>
-                        </ul>
+                       {columnTitle.length >= 1 &&  <ul className='absolute right-0  p-2 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                           { columnsTitle.map((col:any) => {
+                                return <li onClick={() => { handleOptionSelect(col.title) }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>{col.title}</li>
+                            })}
+                        </ul>}
                     </div>
                 }
             </div>

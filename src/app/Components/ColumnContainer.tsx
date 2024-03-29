@@ -102,7 +102,6 @@ function ColumnContainer(props: Props) {
                 <button
                     onClick={() => {
                         createTask(column.id)
-                        console.log('Add Task', column.id)
                     }}
                     className='flex gap-2 items-center  justify-center'>
                     <PlusIcon />
