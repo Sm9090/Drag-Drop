@@ -1,10 +1,14 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(192, 185, 186) rgb(238, 59, 89);
+  scrollbar-color: rgb(192, 185, 186) rgba(243, 189, 189, 0);
+  /* scrollbar-color: rgb(240, 81, 174) transparent; */
 }
 
 /* Chrome, Edge, and Safari */
@@ -18,14 +22,12 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(238, 59, 89);
+  background-color: transparent;
   border-radius: 14px;
-  border: 3px solid rgb(238, 59, 89);
+  border: 1px solid rgb(238, 59, 89);
 }
 
 
-@tailwind components;
-@tailwind utilities;
 
 :root {
   --foreground-rgb: 0, 0, 0;

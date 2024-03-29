@@ -1,3 +1,4 @@
+'use client'
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import PlusIcon from '../Icons/plusIcon'
@@ -88,7 +89,7 @@ function ColumnContainer(props: Props) {
                 </button>
             </div>
             {/* //column task container */}
-            <div className='overflow-y-auto'>
+            <div className='overflow-y-auto h-full '>
                 <SortableContext items={taskIds}>
                     {task.map((task) => {
                         return <div className='' >

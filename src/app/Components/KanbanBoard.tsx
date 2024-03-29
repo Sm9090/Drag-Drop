@@ -4,20 +4,17 @@ import { DndContext, DragOverlay, useSensors, useSensor, PointerSensor, DragOver
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
+import { ref, update, onValue } from "firebase/database";
+import Image from 'next/image';
+import { HashLoader } from 'react-spinners';
 
-
-import PlusIcon from '../Icons/plusIcon'
 import { Column, Id, Task } from './types/types'
 import ColumnContainer from './ColumnContainer'
 import TaskContainer from './TaskContainer';
 import Input from './Input';
-import { onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc } from 'firebase/firestore';
-import { ref, update ,onValue } from "firebase/database";
-import { auth, getUser, db } from '../Config/firebase';
+import { auth, db } from '../Config/firebase';
 import TrelloPng from '../Icons/Trello_logo.svg.png'
-import Image from 'next/image';
-import { ArrowDropDown } from '@mui/icons-material';
 import { AccountMenu, MenuListComposition } from './AccountMenu';
 import AlertDialogSlide from './Dialog';
 
@@ -57,10 +54,10 @@ function KanbanBoard() {
                         setTasks(userData.tasks || []);
                     }
                 });
-            }else{
+            } else {
                 router.push('./Views/Login')
-                    setCurrentUser(null);
-                    setUserId(null)
+                setCurrentUser(null);
+                setUserId(null)
             }
         });
         return () => loggedUser();
@@ -101,7 +98,7 @@ function KanbanBoard() {
         })
     )
 
-    function onAddItem(text: string, selectedOption: string ) {
+    function onAddItem(text: string, selectedOption: string) {
         const selectedColumn = columns.find(column => column.title === selectedOption);
         if (selectedColumn) {
             const newTask: Task = {
@@ -136,7 +133,7 @@ function KanbanBoard() {
         setTasks([...task, newTask])
     }
 
-    function createNewColumn(text :string ) {
+    function createNewColumn(text: string) {
         console.log(text)
 
         const addColumns: Column = {
@@ -255,17 +252,18 @@ function KanbanBoard() {
     }
 
 
-    
 
     if (!currentUser) {
-        return <div>loading</div>
+        return <div className='w-screen h-screen bg-zinc-800 flex justify-center items-center'>
+            <HashLoader color="#ec4899" />
+        </div>
     }
 
     return (
-        <div className='m-auto flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
+        <div className='m-auto  flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
             <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative'>
                 <div className='hidden max-sm:block absolute right-0 top-3 mr-2'>
-                    <AccountMenu  title={currentUser.name} email={currentUser.email} />
+                    <AccountMenu title={currentUser.name} email={currentUser.email} />
                 </div>
                 <div className='flex max-custom:flex-wrap max-custom:justify-center justify-between w-full  items-center border-b border-gray-100 max-sm:text-sm '>
                     <div className='max-custom:basis-full max-custom:flex max-custom:justify-center' >
@@ -280,7 +278,10 @@ function KanbanBoard() {
                 </div>
                 <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
                     <div className='mt-4 mx-4'>
-                        <div className='flex items-center overflow-x-auto  h-[510px] max-sm:flex-wrap max-sm:justify-center'>
+                        <div className='w-full  flex justify-end max-sm:justify-center'>
+                            <AlertDialogSlide createColumn={createNewColumn} />
+                        </div>
+                        <div className='flex items-center overflow-x-auto h-[450px]  max-sm:flex-wrap max-sm:justify-center'>
                             <SortableContext items={columnId}>
                                 {columns.map((col, ind) => {
                                     return <div key={ind} className='mx-2'>
@@ -293,7 +294,6 @@ function KanbanBoard() {
                                     </div>
                                 })}
                             </SortableContext>
-                           <AlertDialogSlide createColumn={createNewColumn}/>
                         </div>
                     </div>
 
@@ -311,7 +311,7 @@ function KanbanBoard() {
                         document.body
                     )}
                 </DndContext>
-                
+
             </div>
         </div>
     )

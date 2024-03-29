@@ -73,7 +73,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
         <div onClick={toggleEditMode}
             ref={setNodeRef} style={style}
             {...attributes} {...listeners}
-            className=" bg-white w-full rounded-xl  px-4 py-2 my-2 cursor-grab text-left items-center flex justify-between drop-shadow-lg"
+            className=" bg-white w-full rounded-xl  px-4 py-2 my-2 cursor-grab text-left  flex justify-between drop-shadow-lg"
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
         >

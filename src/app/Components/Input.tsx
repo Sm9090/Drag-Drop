@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import PlusIcon from '../Icons/plusIcon';
 
 interface InputProps {
     onAddItem: (text: string, selectedOption: string) => void;
