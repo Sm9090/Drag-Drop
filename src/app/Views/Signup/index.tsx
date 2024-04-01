@@ -1,13 +1,13 @@
 'use client'
 import Link from "next/link"
 import { useState } from "react"
+import toast from "react-hot-toast"
 
 import {Register} from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
 import TrelloPng from '../../Icons/Trello_logo.svg.png'
-import toast from "react-hot-toast"
 
 
 
@@ -30,10 +30,10 @@ export default function SignUp() {
             setPassword('')
             setName('')
             setPhoneNumber(null)
-            alert('Registered Succefully')
+            toast.success('Registered Succefully')
             router.push('/Views/Login')
           } catch(e:any) {
-            alert(e)
+            toast.error(e.message)
           }
 
     }

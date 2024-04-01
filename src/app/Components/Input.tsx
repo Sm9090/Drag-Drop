@@ -14,7 +14,6 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
     const [selectedOption, setSelectedOption] = useState<string>("")
     const [columnsTitle ,setColumnsTitle] = useState([])
 
-    console.log(columnsTitle)
     useEffect(()=>{
         setColumnsTitle(columnTitle)
     },[columnTitle])

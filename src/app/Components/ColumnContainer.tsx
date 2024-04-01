@@ -3,6 +3,8 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import PlusIcon from '../Icons/plusIcon'
 import React, { useMemo, useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 
 
 import { Column, Id, Task } from './types/types'
@@ -24,9 +26,11 @@ interface Props {
 function ColumnContainer(props: Props) {
     const { column, deleteColumn, updateColumn, createTask, task, deleteTask, updateTask } = props
     const [editMode, setEditMode] = useState(false)
+    const [columnTitleText, setColumnTitleText] = useState<string>(column.title)
     const taskIds = useMemo(() => {
         return task.map(task => task.id)
     }, [task])
+
 
 
     const { setNodeRef, attributes, listeners, transform, transition, isDragging }: any = useSortable({
@@ -51,7 +55,7 @@ function ColumnContainer(props: Props) {
                 style={style}
                 className=' justify-between text-center
                bg-slate-300 opacity-60 h-[300px]   w-[250px]
-              border-2 border-rose-500'
+              border border-rose-500 rounded-lg'
             >
                 {column.title}
             </div>
@@ -63,53 +67,85 @@ function ColumnContainer(props: Props) {
     }
 
 
+    function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const newTitle = e.target.value.trim();
+        setColumnTitleText(newTitle);
+
+        if (newTitle === "") {
+            updateColumn(column.id, column.title);
+        } else {
+            updateColumn(column.id, newTitle);
+        }
+
+    }
+
+    console.log(columnTitleText)
+
+    function handleBlurOrKeyDown(e: any) {
+        if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
+            const newTitle = e.currentTarget.value.trim();
+
+            if (newTitle === "") {
+                setColumnTitleText(column.title);
+                updateColumn(column.id, column.title);
+            } else {
+                setColumnTitleText(newTitle);
+                updateColumn(column.id, newTitle);
+            }
+
+            setEditMode(false);
+        }
+    }
+
+
+
     return (
-        <div className='flex flex-col justify-between text-center h-[300px] w-[250px]  opacity-100 rounded-lg  bg-gray-200 my-4 px-2 text-sm' ref={setNodeRef} style={style}>
-            {/* column title */}
-            <div className='flex justify-between p-2 m-2 cursor-grab border-b border-gray-100' {...attributes} {...listeners}>
-                <div className='flex gap-2'>
-                    <div onClick={handleEditing}>
-                        {editMode ? <input className='bg-transparent' type="text"
-                            value={column.title}
-                            onChange={(e) => updateColumn(column.id, e.target.value)}
-                            autoFocus onBlur={() => {
-                                setEditMode(false)
-                            }} onKeyDown={(e) => {
-                                if (e.key !== "Enter") return;
-                                setEditMode(false)
-                            }} />
-                            :
-                            column.title}
-                    </div>
-                </div>
-                <button onClick={() => {
-                    deleteColumn(column.id)
-                }}>
-                    <TrashIcon />
-                </button>
-            </div>
-            {/* //column task container */}
-            <div className='overflow-y-auto h-full '>
-                <SortableContext items={taskIds}>
-                    {task.map((task) => {
-                        return <div className='' >
-                            <TaskContainer key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
+     
+
+            <div className='flex flex-col justify-between text-center h-[300px] w-[250px]  opacity-100 rounded-lg  bg-gray-200 my-4 px-2 text-sm' ref={setNodeRef} style={style}>
+                <div className='flex justify-between p-2 m-2 cursor-grab border-b border-gray-100' {...attributes} {...listeners}>
+                    <div className='flex gap-2'>
+                        <div onClick={handleEditing}>
+                            {editMode ? <input className='bg-white px-2 py-1 rounded-lg  outline-blue-400' type="text"
+                                value={columnTitleText}
+                                onChange={handleTitleChange}
+                                autoFocus onBlur={handleBlurOrKeyDown} onKeyDown={handleBlurOrKeyDown} />
+                                :
+                                column.title}
                         </div>
-                    })}
-                </SortableContext>
+                    </div>
+                    {column.id === 1 || column.id === 2 || column.id === 3 ?
+                        ''
+                        :
+                        <button onClick={() => {
+                            deleteColumn(column.id)
+                        }}>
+                            <TrashIcon />
+                        </button>
+                    }
+                </div>
+                {/* //column task container */}
+                <div className='overflow-y-auto h-full '>
+                    <SortableContext items={taskIds}>
+                        {task.map((task) => {
+                            return <div className='' >
+                                <TaskContainer key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
+                            </div>
+                        })}
+                    </SortableContext>
+                </div>
+                {/* column footer  */}
+                <div className='m-2 w-[100%]'>
+                    <button
+                        onClick={() => {
+                            createTask(column.id)
+                        }}
+                        className='flex gap-2 items-center  justify-center'>
+                        <PlusIcon />
+                        Add Task
+                    </button>
+                </div>
             </div>
-            {/* column footer  */}
-            <div className='m-2 w-[100%]'>
-                <button
-                    onClick={() => {
-                        createTask(column.id)
-                    }}
-                    className='flex gap-2 items-center  justify-center'>
-                    <PlusIcon />
-                    Add Task
-                </button>
-            </div>
-        </div>
     )
 }
 

@@ -9,6 +9,7 @@ import { ref, update, onValue } from "firebase/database";
 import Image from 'next/image';
 import { HashLoader } from 'react-spinners';
 
+
 import { Column, Id, Task } from './types/types'
 import ColumnContainer from './ColumnContainer'
 import TaskContainer from './TaskContainer';
@@ -39,18 +40,14 @@ function KanbanBoard() {
     useEffect(() => {
         const loggedUser = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
                 const uid = user.uid;
-                console.log(uid)
                 setUserId(uid)
-                // const userData = await getUser(uid)
-                // console.log('come from real time db',userData)
                 const userRef = ref(db, `users/${uid}`);
                 onValue(userRef, (snapshot) => {
                     const userData = snapshot.val();
                     setCurrentUser(userData);
                     if (userData) {
-                        setColumns(userData.columns || []);
+                        setColumns(userData.columns || columns);
                         setTasks(userData.tasks || []);
                     }
                 });
@@ -88,7 +85,6 @@ function KanbanBoard() {
     // console.log(currentUser)
 
     const columnId = useMemo(() => columns.map((col) => col.id), [columns])
-    console.log('columnId ==>', columnId)
     const sensor = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -252,6 +248,19 @@ function KanbanBoard() {
     }
 
 
+    //     <Swiper
+    //       spaceBetween={50}
+    //       slidesPerView={1}
+    //       onSwiper={(swiper) => console.log(swiper)}
+    //       onSlideChange={() => console.log('slide change')}
+    //     >
+    //       <SwiperSlide>
+    //         {/* Render your tasks here */}
+    //       </SwiperSlide>
+    //     </Swiper>
+    //   );
+    // };
+
 
     if (!currentUser) {
         return <div className='w-screen h-screen bg-zinc-800 flex justify-center items-center'>
@@ -260,7 +269,7 @@ function KanbanBoard() {
     }
 
     return (
-        <div className='m-auto  flex  flex-col items-center flex-wrap justify-start p-4 w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
+        <div className='m-auto  flex  flex-col items-center flex-wrap justify-start  w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
             <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative'>
                 <div className='hidden max-sm:block absolute right-0 top-3 mr-2'>
                     <AccountMenu title={currentUser.name} email={currentUser.email} />
@@ -277,11 +286,12 @@ function KanbanBoard() {
                     </div>
                 </div>
                 <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
-                    <div className='mt-4 mx-4'>
-                        <div className='w-full  flex justify-end max-sm:justify-center'>
+                    <div className='mt-2 mx-4'>
+                        <div className='w-full  flex justify-center max-sm:justify-center'>
                             <AlertDialogSlide createColumn={createNewColumn} />
                         </div>
-                        <div className='flex items-center overflow-x-auto h-[450px]  max-sm:flex-wrap max-sm:justify-center'>
+
+                        <div className='flex overflow-x-auto items-center  h-[477px]  max-sm:flex-wrap max-sm:justify-center'>
                             <SortableContext items={columnId}>
                                 {columns.map((col, ind) => {
                                     return <div key={ind} className='mx-2'>

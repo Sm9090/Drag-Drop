@@ -34,7 +34,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
         return <div
             ref={setNodeRef}
             style={style}
-            className="bg-emerald-300 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center border-rose-500 border-2 relative opacity-30" >{task.content}</div>
+            className="bg-slate-200 w-full rounded-xl  p-4 my-2 cursor-grab text-left items-center border-rose-500 border relative opacity-30" >{task.content}</div>
     }
 
     function onMouseOver() {
