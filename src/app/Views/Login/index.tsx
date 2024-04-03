@@ -1,11 +1,13 @@
 'use client'
 import Link from "next/link"
 import { useState } from "react"
+import { useFormik } from "formik"
+
 
 import { SignIn } from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-
+import { LoginSchema } from "@/app/Config/schemas"
 
 
 import TrelloPng from '../../Icons/Trello_logo.svg.png'
@@ -16,37 +18,39 @@ import toast from "react-hot-toast"
 
 export default function Login() {
 
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const router = useRouter()
-    
-
-    const handleLogIn = async (e: any) => {
-        e.preventDefault()
-        try {
-            await SignIn({ email, password })
-            setEmail('')
-            setPassword('')
-            toast.success('Login Sucessfully')
-            router.push('/')
-        } catch (error: any) {
-            toast.error(error.message)
-        }
+    const initialValues = {
+        email: "",
+        password: "",
     }
 
+    const router = useRouter()
+
+    const { handleSubmit, handleChange, values, handleBlur, errors, touched } = useFormik({
+        initialValues: initialValues,
+        validationSchema: LoginSchema,
+        onSubmit: async (values) => {
+            try {
+                await SignIn(values)
+                toast.success('Login Sucessfully')
+                router.push('/')
+            } catch (error: any) {
+                toast.error(error.message)
+            }
+        }
+    })
 
     return (
         <div className="min-h-full h-screen bg-gradient-to-r from-pink-500 to-blue-500 flex items-center justify-center">
             <div className="flex  flex-1 flex-col justify-center mx-6  px-6 py-12 lg:px-8 backdrop-blur-sm bg-white/20  max-w-sm rounded-lg ">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm ">
-                <Image className="mx-auto h-10 w-auto" src={TrelloPng} alt="Your Company" />
+                    <Image className="mx-auto h-10 w-auto" src={TrelloPng} alt="Your Company" />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Sign in to your account
                     </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" onSubmit={handleLogIn} method="POST">
+                    <form className="space-y-6" onSubmit={handleSubmit} method="POST">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address
@@ -59,8 +63,13 @@ export default function Login() {
                                     autoComplete="email"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.email}
                                 />
+                                {errors.email && touched.email ?
+                                    <p className="text-sm text-red-300 m-2">{errors.email}</p> :
+                                    null}
                             </div>
                         </div>
 
@@ -83,7 +92,9 @@ export default function Login() {
                                     autoComplete="current-password"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.password}
                                 />
                             </div>
                         </div>

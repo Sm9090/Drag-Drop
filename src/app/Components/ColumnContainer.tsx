@@ -31,8 +31,6 @@ function ColumnContainer(props: Props) {
         return task.map(task => task.id)
     }, [task])
 
-
-
     const { setNodeRef, attributes, listeners, transform, transition, isDragging }: any = useSortable({
         id: column.id,
         data: {
@@ -101,7 +99,6 @@ function ColumnContainer(props: Props) {
 
     return (
      
-
             <div className='flex flex-col justify-between text-center h-[300px] w-[250px]  opacity-100 rounded-lg  bg-gray-200 my-4 px-2 text-sm' ref={setNodeRef} style={style}>
                 <div className='flex justify-between p-2 m-2 cursor-grab border-b border-gray-100' {...attributes} {...listeners}>
                     <div className='flex gap-2'>

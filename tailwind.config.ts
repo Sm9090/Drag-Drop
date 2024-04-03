@@ -16,7 +16,8 @@ const config: Config = {
       screens:{
         'max-custom': {'max' : '885px'},
         'max-md' : {'max': '768px'},
-        'max-sm' : {'max': '680px'}
+        'max-sm' : {'max': '680px'},
+        'max-xs' : {'max' : '380px'}
       }
     },
   },

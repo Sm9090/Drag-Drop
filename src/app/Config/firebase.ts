@@ -23,7 +23,7 @@ export const db = getDatabase(app)
 interface Props {
     email: string,
     password: string,
-    phoneNumber: number | null,
+    confirmPassword : string,
     name: string
 }
 
@@ -33,13 +33,13 @@ interface Login {
 }
 
 
-export async function Register({ email, password, phoneNumber, name }: Props) {
+export async function Register(values: Props) {
+    const {name , confirmPassword ,email ,password} = values
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password)
     try {
         const userRef = ref(db, `users/${uid}`);
         await set(userRef, {
             name,
-            phoneNumber,
             email
         });
         console.log('added in database ', uid)
@@ -48,14 +48,10 @@ export async function Register({ email, password, phoneNumber, name }: Props) {
     }
 }
 
-export async function SignIn({ email, password }: Login) {
+export async function SignIn(values: Login) {
+    const {email, password} = values
     await signInWithEmailAndPassword(auth, email, password)
 }
-
-
-// const user = auth.currentUser
-
-// console.log(user)
 
 
 export const getUser = async (uid: any) => {

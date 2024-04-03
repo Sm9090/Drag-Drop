@@ -189,7 +189,7 @@ export  function MenuListComposition({title , email} : props) {
   }
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="row" spacing={3}>
       <div>
         <Button
           ref={anchorRef}

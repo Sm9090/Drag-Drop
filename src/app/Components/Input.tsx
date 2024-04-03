@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { button } from '@material-tailwind/react';
 
 interface InputProps {
     onAddItem: (text: string, selectedOption: string) => void;
@@ -14,6 +15,7 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
     const [selectedOption, setSelectedOption] = useState<string>("")
     const [columnsTitle ,setColumnsTitle] = useState([])
 
+    console.log(selectedOption)
     useEffect(()=>{
         setColumnsTitle(columnTitle)
     },[columnTitle])
@@ -39,22 +41,28 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
             setSelectedOption("")
         }
     }
+    
     return (
         <div>
             <div className='w-max max-[425px]:w-auto' >
                 <div className=' flex max-[425px]:flex-wrap max-[425px]:justify-center max-[425px]:w-full'>
-                    <div className='border-none rounded-lg p-2  backdrop-blur-sm bg-white/10 hover:bg-white/30'>
-                        <input type="text" onChange={handleInputValue} className='border-0 bg-transparent outline-none ' value={text} placeholder='Task Title' />
-                        <button onClick={handleMenu} className='w-8 border-l border-l-gray-400'>
+                    <div className='border-none rounded-lg p-2 backdrop-blur-sm bg-white/10 hover:bg-white/30'>
+                        <input type="text" onChange={handleInputValue} className='border-0 bg-transparent outline-none max-xs:w-[100px] ' value={text} placeholder='Task Title' />
+                        { selectedOption ? <button onClick={handleMenu} className='font-light text-sm px-1 border-l border-l-gray-400 max-xs:text-xs' >
+                            {selectedOption}
+                            <ArrowDropDownIcon />
+                        </button> :
+                        <button onClick={handleMenu} className='w-8 border-l border-l-gray-400' autoFocus>
                             <ArrowDropDownIcon />
                         </button>
+}
                     </div>
                     <button onClick={addItemToCard} className="bg-white/10 hover:bg-white/30  hover:transition py-2 px-4  rounded-xl ml-2 text-sm max-[425px]:mt-2 text-white">
                         Add Task
                     </button>
                 </div>
                 {toggleMenu &&
-                    <div className='relative w-full m-0.5 '>
+                    <div className='relative w-full '>
                        {columnTitle.length >= 1 &&  <ul className='absolute right-0  p-2 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                            { columnsTitle.map((col:any) => {
                                 return <li onClick={() => { handleOptionSelect(col.title) }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>{col.title}</li>

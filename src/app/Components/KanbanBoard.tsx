@@ -8,6 +8,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { ref, update, onValue } from "firebase/database";
 import Image from 'next/image';
 import { HashLoader } from 'react-spinners';
+import { v4 as uuidv4 } from 'uuid';
 
 
 import { Column, Id, Task } from './types/types'
@@ -82,8 +83,8 @@ function KanbanBoard() {
         saveData();
     }, [columns, task, currentUser]);
 
-    // console.log(currentUser)
 
+   
     const columnId = useMemo(() => columns.map((col) => col.id), [columns])
     const sensor = useSensors(
         useSensor(PointerSensor, {
@@ -122,7 +123,7 @@ function KanbanBoard() {
 
     function createTask(columnId: Id) {
         const newTask: Task = {
-            id: Math.ceil(Math.random() * 10000), columnId,
+            id: uuidv4(), columnId,
             content: `Task ${task.length + 1}`
         }
         console.log(columnId)
@@ -134,7 +135,7 @@ function KanbanBoard() {
 
         const addColumns: Column = {
             title: text,
-            id: Math.ceil(Math.random() * 10000)
+            id: uuidv4()
         }
 
         setColumns([...columns, addColumns])
@@ -246,21 +247,6 @@ function KanbanBoard() {
         }
 
     }
-
-
-    //     <Swiper
-    //       spaceBetween={50}
-    //       slidesPerView={1}
-    //       onSwiper={(swiper) => console.log(swiper)}
-    //       onSlideChange={() => console.log('slide change')}
-    //     >
-    //       <SwiperSlide>
-    //         {/* Render your tasks here */}
-    //       </SwiperSlide>
-    //     </Swiper>
-    //   );
-    // };
-
 
     if (!currentUser) {
         return <div className='w-screen h-screen bg-zinc-800 flex justify-center items-center'>
