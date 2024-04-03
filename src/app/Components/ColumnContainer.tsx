@@ -124,8 +124,8 @@ function ColumnContainer(props: Props) {
                 {/* //column task container */}
                 <div className='overflow-y-auto h-full '>
                     <SortableContext items={taskIds}>
-                        {task.map((task) => {
-                            return <div className='' >
+                        {task.map((task , index) => {
+                            return <div className=''  key={index}>
                                 <TaskContainer key={task.id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
                             </div>
                         })}

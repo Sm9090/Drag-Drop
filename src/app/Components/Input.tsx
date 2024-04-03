@@ -64,8 +64,8 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
                 {toggleMenu &&
                     <div className='relative w-full '>
                        {columnTitle.length >= 1 &&  <ul className='absolute right-0  p-2 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                           { columnsTitle.map((col:any) => {
-                                return <li onClick={() => { handleOptionSelect(col.title) }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>{col.title}</li>
+                           { columnsTitle.map((col:any , index:number) => {
+                                return <li key={index} onClick={() => { handleOptionSelect(col.title) }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>{col.title}</li>
                             })}
                         </ul>}
                     </div>
