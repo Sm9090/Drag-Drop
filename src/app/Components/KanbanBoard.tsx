@@ -59,7 +59,7 @@ function KanbanBoard() {
             }
         });
         return () => loggedUser();
-    }, []);
+    }, [router]);
 
 
     useEffect(() => {
@@ -81,7 +81,7 @@ function KanbanBoard() {
             }
         }
         saveData();
-    }, [columns, task, currentUser]);
+    }, [columns, task, currentUser ,userId]);
 
 
    
