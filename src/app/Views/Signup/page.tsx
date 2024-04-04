@@ -1,5 +1,4 @@
-import React from 'react'
-import SignUp from '.'
+import SignUp from './index'
 
 function page() {
   return (

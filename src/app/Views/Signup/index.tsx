@@ -43,6 +43,7 @@ export default function SignUp() {
 
    
     return (
+      <>
       <div className="min-h-full  bg-gradient-to-r from-pink-500 to-blue-500 flex items-center justify-center">
             <div className="flex  flex-1 flex-col justify-center my-5  px-6 py-6 lg:px-8 backdrop-blur-sm bg-white/20  max-w-sm rounded-lg ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -161,6 +162,7 @@ export default function SignUp() {
           </div>
         </div>
       </div>
+      </>
     )
   }
   

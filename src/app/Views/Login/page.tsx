@@ -1,5 +1,4 @@
-import React from 'react'
-import Login from '.'
+import Login from './index'
 
 function page() {
   return (

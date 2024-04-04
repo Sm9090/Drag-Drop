@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
 import { getDatabase , ref, set ,get } from "firebase/database"
 
@@ -15,9 +14,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
 export const auth = getAuth()
-// export const db = getFirestore(app);
+
 export const db = getDatabase(app)
 
 interface Props {
