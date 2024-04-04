@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState ,useEffect } from "react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 
@@ -9,13 +9,34 @@ interface Props {
     task: Task
     deleteTask: (id: Id) => void;
     updateTask: (id: Id, content: string) => void
+    style?: React.CSSProperties;
 }
 
-function TaskContainer({ task, deleteTask, updateTask }: Props) {
+function TaskContainer({ task, deleteTask, updateTask ,style }: Props) {
 
     const [mouseOver, setMouseOver] = useState(false)
     const [editMode, setEditMode] = useState(false)
     const [taskTitle ,setTaskTitle] = useState<string>(task.content)
+
+
+    const [isMobileView, setIsMobileView] = useState(false);
+
+    useEffect(() => {
+        // Function to check if the viewport width is less than a certain threshold
+        const handleResize = () => {
+            const mobileThreshold = 425; // Adjust this threshold as needed
+            setIsMobileView(window.innerWidth < mobileThreshold);
+        };
+
+        // Initial check on component mount
+        handleResize();
+
+        // Event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup on component unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const { setNodeRef, attributes, listeners, transform, transtition, isDragging }: any = useSortable({
         id: task.id,
@@ -28,9 +49,10 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
 
     console.log(task)
 
-    const style = {
+    const styleObj  = {
         transtition,
-        transform: CSS.Transform.toString(transform)
+        transform: CSS.Transform.toString(transform),
+        ...style
     }
 
     if (isDragging) {
@@ -86,7 +108,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
     // task.id, e.target.value
     if (editMode) {
         return <div onClick={toggleEditMode}
-            className=" bg-white w-full rounded-xl px-2 my-2 cursor-grab text-left items-center flex justify-between drop-shadow-lg "
+            className={`bg-white w-full rounded-xl px-2 my-2 cursor-grab text-left items-center flex justify-between drop-shadow-lg`}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
             ref={setNodeRef}
@@ -110,16 +132,15 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
             className=" bg-white w-full rounded-xl  px-4 py-2 my-2 cursor-grab text-left  flex justify-between drop-shadow-lg"
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            onTouchStart={() => setMouseOver(true)} 
-            onTouchEnd={() => setMouseOver(false)}
+
         >
             {task.content}
             <button onClick={() => {
                 deleteTask(task.id)
-            }} className="opacity-60 hover:opacity-100">
-                {mouseOver &&
+            }} className="opacity-60 hover:opacity-100" >
+                <div className={mouseOver || isMobileView ? 'block' : 'hidden'}>
                     <TrashIcon />
-                }
+                    </div>
             </button >
         </div>
     )
