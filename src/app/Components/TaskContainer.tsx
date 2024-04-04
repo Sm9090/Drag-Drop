@@ -9,10 +9,9 @@ interface Props {
     task: Task
     deleteTask: (id: Id) => void;
     updateTask: (id: Id, content: string) => void
-    style?: React.CSSProperties;
 }
 
-function TaskContainer({ task, deleteTask, updateTask ,style }: Props) {
+function TaskContainer({ task, deleteTask, updateTask  }: Props) {
 
     const [mouseOver, setMouseOver] = useState(false)
     const [editMode, setEditMode] = useState(false)
@@ -49,10 +48,10 @@ function TaskContainer({ task, deleteTask, updateTask ,style }: Props) {
 
     console.log(task)
 
-    const styleObj  = {
+    const style  = {
         transtition,
         transform: CSS.Transform.toString(transform),
-        ...style
+        
     }
 
     if (isDragging) {
