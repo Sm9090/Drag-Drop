@@ -59,8 +59,9 @@ function KanbanBoard() {
             }
         });
         return () => loggedUser();
-    }, [router]);
+    }, []);
 
+    console.log(columns)
 
     useEffect(() => {
         const saveData = async () => {
@@ -81,7 +82,7 @@ function KanbanBoard() {
             }
         }
         saveData();
-    }, [columns, task, currentUser ,userId]);
+    }, [columns, task, currentUser]);
 
 
    
@@ -131,8 +132,6 @@ function KanbanBoard() {
     }
 
     function createNewColumn(text: string) {
-        console.log(text)
-
         const addColumns: Column = {
             title: text,
             id: uuidv4()

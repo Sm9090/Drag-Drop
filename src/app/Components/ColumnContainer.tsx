@@ -77,8 +77,6 @@ function ColumnContainer(props: Props) {
 
     }
 
-    console.log(columnTitleText)
-
     function handleBlurOrKeyDown(e: any) {
         if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
             const newTitle = e.currentTarget.value.trim();
