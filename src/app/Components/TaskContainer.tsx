@@ -15,6 +15,7 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
 
     const [mouseOver, setMouseOver] = useState(false)
     const [editMode, setEditMode] = useState(false)
+    const [taskTitle ,setTaskTitle] = useState<string>(task.content)
 
     const { setNodeRef, attributes, listeners, transform, transtition, isDragging }: any = useSortable({
         id: task.id,
@@ -24,6 +25,8 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
         },
         disabled: editMode
     })
+
+    console.log(task)
 
     const style = {
         transtition,
@@ -45,9 +48,42 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
     }
 
     const toggleEditMode = () => {
-        setEditMode((prev) => !prev)
+        setEditMode(true)
         setMouseOver(false)
     }
+    function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>){
+        const newTitle = e.target.value
+        setTaskTitle(newTitle)
+   
+        if(newTitle === ""){
+           updateTask(task.id , task.content)
+        } else{
+           updateTask(task.id , newTitle)
+        }
+        toggleEditMode()
+   
+       }
+
+       function handleBlurOrKeyDown(e: any) {
+        if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
+            const newTitle = e.currentTarget.value;
+
+            if(newTitle === ""){
+                setTaskTitle(task.content)
+                updateTask(task.id , task.content)
+             } else{
+                setTaskTitle(task.content)
+                updateTask(task.id , newTitle)
+             }
+
+            toggleEditMode()
+            setEditMode(false)
+        }
+    }
+
+
+   
+    // task.id, e.target.value
     if (editMode) {
         return <div onClick={toggleEditMode}
             className=" bg-white w-full rounded-xl px-2 my-2 cursor-grab text-left items-center flex justify-between drop-shadow-lg "
@@ -60,12 +96,10 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
 
         >
             <textarea className="bg-transparent max-h-max p-2 resize-none border-none rounded-xl focus:outline-none "
-                value={task.content}
-                autoFocus onBlur={toggleEditMode} placeholder="Task content here
-           "onKeyDown={(e) => {
-                    if (e.key === 'Enter') toggleEditMode();
-                }}
-                onChange={(e) => updateTask(task.id, e.target.value)}></textarea>
+                value={taskTitle}
+                autoFocus onBlur={handleBlurOrKeyDown} placeholder="Task content here
+           "onKeyDown={handleBlurOrKeyDown}
+                onChange={handleTitleChange}></textarea>
         </div>
     }
 
@@ -76,6 +110,8 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
             className=" bg-white w-full rounded-xl  px-4 py-2 my-2 cursor-grab text-left  flex justify-between drop-shadow-lg"
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
+            onTouchStart={() => setMouseOver(true)} 
+            onTouchEnd={() => setMouseOver(false)}
         >
             {task.content}
             <button onClick={() => {
