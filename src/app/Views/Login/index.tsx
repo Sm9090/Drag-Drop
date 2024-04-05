@@ -5,10 +5,12 @@ import { useFormik } from "formik"
 import { PulseLoader  } from "react-spinners"
 
 
+
 import { SignIn } from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { LoginSchema } from "@/app/Config/schemas"
+import ResetDialogSlide from "@/app/Components/ResetDialog"
 
 
 import TrelloPng from '../../Icons/Trello_logo.svg.png'
@@ -85,7 +87,7 @@ export default function Login() {
                                 </label>
                                 <div className="text-sm">
                                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                        Forgot password?
+                                       <ResetDialogSlide />
                                     </a>
                                 </div>
                             </div>

@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import { getDatabase , ref, set ,get } from "firebase/database"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { getDatabase, ref, set, get } from "firebase/database"
+import toast from 'react-hot-toast';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyD5oHZ2MU6pqQiWhL5se9QWa4FnTXqL2GI",
@@ -22,7 +24,7 @@ export const db = getDatabase(app)
 interface Props {
     email: string,
     password: string,
-    confirmPassword : string,
+    confirmPassword: string,
     name: string
 }
 
@@ -33,7 +35,7 @@ interface Login {
 
 
 export async function Register(values: Props) {
-    const {name , confirmPassword ,email ,password} = values
+    const { name, confirmPassword, email, password } = values
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password)
     try {
         const userRef = ref(db, `users/${uid}`);
@@ -48,7 +50,7 @@ export async function Register(values: Props) {
 }
 
 export async function SignIn(values: Login) {
-    const {email, password} = values
+    const { email, password } = values
     await signInWithEmailAndPassword(auth, email, password)
 }
 
@@ -65,6 +67,17 @@ export const getUser = async (uid: any) => {
 
 }
 
+export const resetPassword = async (email:string) => {
+    console.log(email)
+    try{
+    await sendPasswordResetEmail(auth, email)  
+        toast.success("Check Your Email")
+       }catch(e:any){
+        toast.error(e.message)
+       }
+}
+
+
 export async function logout() {
     return await signOut(auth)
-  }
+}
