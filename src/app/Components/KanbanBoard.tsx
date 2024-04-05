@@ -272,11 +272,11 @@ function KanbanBoard() {
                 </div>
                 <DndContext sensors={sensor} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
                     <div className='mt-2 mx-4'>
-                        <div className='w-full  flex justify-center max-sm:justify-center'>
+                        <div className='w-full  flex justify-center'>
                             <AlertDialogSlide createColumn={createNewColumn} />
                         </div>
 
-                        <div className='flex overflow-x-auto items-center  h-[477px]  max-sm:h-auto '>
+                        <div className='flex overflow-x-auto items-center  h-[477px]  max-sm:h-full '>
                             <SortableContext items={columnId}>
                                 {columns.map((col, ind) => {
                                     return <div key={ind} className='mx-2'>
