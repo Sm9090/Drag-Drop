@@ -1,9 +1,9 @@
-import KanbanBoard from "./Components/KanbanBoard";
+import Login from "./Views/Login";
 
 export default function Home() {
   return (
     <div>
-    <KanbanBoard />
+    <Login />
     </div>
   );
 }

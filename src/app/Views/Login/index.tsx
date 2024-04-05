@@ -36,7 +36,7 @@ export default function Login() {
                 setLoader(true)
                 await SignIn(values)
                 toast.success('Login Sucessfully')
-                router.push('/')
+                router.push('/Views/Home')
             } catch (error: any) {
                 setLoader(false)
                 toast.error(error.message)

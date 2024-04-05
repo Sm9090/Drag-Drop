@@ -15,10 +15,23 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
     const [selectedOption, setSelectedOption] = useState<string>("")
     const [columnsTitle ,setColumnsTitle] = useState([])
 
-    console.log(selectedOption)
+    
     useEffect(()=>{
         setColumnsTitle(columnTitle)
     },[columnTitle])
+
+    useEffect(() => {
+        // Attach event listener for outside click when dropdown is open
+        if (toggleMenu) {
+          document.addEventListener("mousedown", handleOutsideClick);
+        } else {
+          document.removeEventListener("mousedown", handleOutsideClick);
+        }
+        // Cleanup event listener on component unmount
+        return () => {
+          document.removeEventListener("mousedown", handleOutsideClick);
+        };
+      }, [toggleMenu]);
 
     const handleMenu = () => {
         setToggleMenu(!toggleMenu)
@@ -34,6 +47,12 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
         setToggleMenu(false)
     }
 
+    const handleOutsideClick = (event : any) =>{
+        if (event.target.closest(".dropdown-wrapper") === null) {
+            setToggleMenu(false);
+          }
+    }
+
     const addItemToCard = () => {
         if (text.trim() !== "" && selectedOption !== "") {
             onAddItem(text, selectedOption )
@@ -44,7 +63,7 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
     
     return (
         <div>
-            <div className='w-max max-[425px]:w-auto' >
+            <div className='w-max max-[425px]:w-auto dropdown-wrapper' >
                 <div className=' flex max-[425px]:flex-wrap max-[425px]:justify-center max-[425px]:w-full'>
                     <div className='border-none rounded-lg p-2 backdrop-blur-sm bg-white/10 hover:bg-white/30'>
                         <input type="text" onChange={handleInputValue} className='border-0 bg-transparent outline-none max-xs:w-[100px] ' value={text} placeholder='Task Title' />

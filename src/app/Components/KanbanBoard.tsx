@@ -53,7 +53,7 @@ function KanbanBoard() {
                     }
                 });
             } else {
-                router.push('./Views/Login')
+                router.push('/')
                 setCurrentUser(null);
                 setUserId(null)
             }

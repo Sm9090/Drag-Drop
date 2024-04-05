@@ -1,4 +1,5 @@
-import Login from './index'
+import Login from "."
+
 
 function page() {
   return (
