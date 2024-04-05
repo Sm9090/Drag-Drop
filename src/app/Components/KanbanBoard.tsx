@@ -258,7 +258,7 @@ function KanbanBoard() {
 
     return (
         <div className='m-auto  flex  flex-col items-center flex-wrap justify-start  w-full min-h-screen px=[40px] overflow-x-auto overflow-y-hidden bg-gradient-to-r from-pink-500 to-blue-500 '>
-            <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative max-sm:h-full'>
+            <div className=' w-[80%] rounded-md backdrop-blur-sm bg-white/20 p-2 max-sm:w-[100%] relative max-sm:h-screen'>
                 <div className='hidden max-sm:block absolute right-0 top-3 mr-2'>
                     <AccountMenu title={currentUser.name} email={currentUser.email} />
                 </div>
