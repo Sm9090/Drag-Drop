@@ -41,8 +41,8 @@ export default function SignUp() {
           toast.success('Registered Successfully');
           router.push('/Views/Login');
         } catch (e:any) {
-          setLoader(true)
           toast.error(e.message);
+          setLoader(false)
         }
         action.resetForm()
       }
