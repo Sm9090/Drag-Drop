@@ -16,6 +16,7 @@ export const SignupSchema = Yup.object().shape({
 
   export const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').matches(emailRegex, 'Invalid Email').required("Email is required"), 
+    password: Yup.string().min(8).required("Please Enter Your Password"),
   })
 
 

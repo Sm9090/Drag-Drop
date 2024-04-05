@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { useFormik } from "formik"
+import { PulseLoader  } from "react-spinners"
 
 
 import { SignIn } from "@/app/Config/firebase"
@@ -18,6 +19,8 @@ import toast from "react-hot-toast"
 
 export default function Login() {
 
+    const [loader, setLoader] = useState(false)
+
     const initialValues = {
         email: "",
         password: "",
@@ -25,15 +28,17 @@ export default function Login() {
 
     const router = useRouter()
 
-    const { handleSubmit, handleChange, values, handleBlur, errors, touched } = useFormik({
+    const { handleSubmit, handleChange, values, handleBlur, errors, touched ,isValid ,dirty } = useFormik({
         initialValues: initialValues,
         validationSchema: LoginSchema,
         onSubmit: async (values) => {
             try {
+                setLoader(true)
                 await SignIn(values)
                 toast.success('Login Sucessfully')
                 router.push('/')
             } catch (error: any) {
+                setLoader(false)
                 toast.error(error.message)
             }
         }
@@ -101,11 +106,14 @@ export default function Login() {
 
                         <div>
                             <button
-                                type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                               type="submit"
+                               className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${!isValid || !dirty ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-500'}`}
+                               disabled={!isValid || !dirty}
+                               style={{ transition: 'opacity 0.3s' }}
                             >
-                                Sign in
+                                {loader ?  (<div><PulseLoader  color="white" size={"8px"}/></div>): "Sign in"  }
                             </button>
+                            
                         </div>
                     </form>
 

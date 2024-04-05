@@ -1,6 +1,9 @@
 'use client'
+
 import toast from "react-hot-toast"
 import { useFormik } from "formik"
+import { useState } from "react"
+import { PulseLoader  } from "react-spinners"
 
 import {Register} from "@/app/Config/firebase"
 import { useRouter } from "next/navigation"
@@ -13,6 +16,9 @@ import TrelloPng from '../../Icons/Trello_logo.svg.png'
 
 
 export default function SignUp() {
+
+  const [loader, setLoader] = useState(false)
+
   
 
     const initialValues ={
@@ -25,15 +31,17 @@ export default function SignUp() {
 
 
     const router = useRouter()
-    const {  handleBlur , errors ,  touched, handleSubmit , handleChange ,values}  = useFormik({
+    const {  handleBlur , errors ,  touched, handleSubmit , handleChange ,values , isValid , dirty}  = useFormik({
       initialValues,
       validationSchema: SignupSchema,
       onSubmit: async (values , action) => {
         try {
+          setLoader(true)
           await Register(values);
           toast.success('Registered Successfully');
           router.push('/Views/Login');
         } catch (e:any) {
+          setLoader(true)
           toast.error(e.message);
         }
         action.resetForm()
@@ -41,6 +49,8 @@ export default function SignUp() {
       
     })
 
+    console.log("isValid" , isValid)
+    console.log("dirty" ,dirty)
    
     return (
       <>
@@ -145,10 +155,12 @@ export default function SignUp() {
 
               <div>
                 <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                   type="submit"
+                   className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${!isValid || !dirty ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-500'}`}
+                   disabled={!isValid || !dirty}
+                   style={{ transition: 'opacity 0.3s' }}
                 >
-                  Submit
+                  {loader ?( <div> <PulseLoader  color="white" size={"8px"}/></div> ): "Submit"  }
                 </button>
               </div>
             </form>
