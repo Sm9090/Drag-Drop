@@ -276,7 +276,7 @@ function KanbanBoard() {
                             <AlertDialogSlide createColumn={createNewColumn} />
                         </div>
 
-                        <div className='flex overflow-x-auto items-center  h-[477px]  max-sm:flex-wrap max-sm:justify-center'>
+                        <div className='flex overflow-x-auto items-center  h-[477px]  max-sm:h-auto '>
                             <SortableContext items={columnId}>
                                 {columns.map((col, ind) => {
                                     return <div key={ind} className='mx-2'>
