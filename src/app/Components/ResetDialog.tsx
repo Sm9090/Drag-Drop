@@ -50,22 +50,19 @@ export default function ResetDialogSlide() {
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
-                PaperProps={{ style: { backgroundColor: 'rgb(229 231 235 ,1)', borderRadius: '8px', width: '500px' } }}
+                PaperProps={{ style: { backgroundColor: 'rgb(229 231 235 ,1)', borderRadius: '8px', width: '350px' } }}
                 className='opacity-100 rounded-lg   '
             >
                 <DialogTitle>
-                    <Typography variant="h6" style={{ fontFamily: 'Arial' , fontWeight: 'bolder' ,fontSize: "24px" ,textAlign: "center" }}>{"Password Reset "}</Typography>
-                    <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, repellendus beatae a nostrum recusandae ducimus mollitia, porro officiis, aut minus facilis possimus veniam rerum sapiente veritatis ex ipsa odit eius.</p>
+                    <Typography variant="h6" style={{ fontFamily: 'Arial' , fontWeight: 'bolder' ,fontSize: "24px" }}>{"Password Reset "}</Typography>
+                    <p className='text-[17px]'>To reset your password, enter the email address you use to sign in to </p>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        <input type='email' name='email'  className='bg-white w-full rounded-xl  px-4 py-2 my-2  text-left items-center flex justify-between drop-shadow-lg' value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type='email' name='email'  className='bg-white w-full rounded-xl  px-4 py-2 my-2  text-left items-center flex justify-between drop-shadow-lg' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='E-mail Address' />
+                    <Button style={{ color: 'white', display: 'block' ,width: '100%' ,backgroundColor: '#18d618' }} onClick={handleAddingColumn}>Send Reset Link</Button>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button style={{ color: 'black', }} onClick={handleAddingColumn}>Reset</Button>
-                    <Button style={{ color: 'black', }} onClick={handleClose}>Close</Button>
-                </DialogActions>
             </Dialog>
         </React.Fragment>
     );
