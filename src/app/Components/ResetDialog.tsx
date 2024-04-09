@@ -13,7 +13,7 @@ import { resetPassword } from '../Config/firebase';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: React.ReactElement<HTMLDivElement>;
     },
     ref: React.Ref<unknown>,
 ) {
@@ -40,7 +40,6 @@ export default function ResetDialogSlide() {
 
     return (
         <React.Fragment >
-
             <button onClick={handleClickOpen} >
                 Forgot Password?
             </button>
@@ -60,7 +59,7 @@ export default function ResetDialogSlide() {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
                         <input type='email' name='email'  className='bg-white w-full rounded-xl  px-4 py-2 my-2  text-left items-center flex justify-between drop-shadow-lg' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='E-mail Address' />
-                    <Button style={{ color: 'white', display: 'block' ,width: '100%' ,backgroundColor: '#18d618' }} onClick={handleAddingColumn}>Send Reset Link</Button>
+                    <Button style={{ color: 'white', display: 'block' ,width: '100%' ,backgroundColor: '#18d618'}}  onClick={handleAddingColumn}>Send Reset Link</Button>
                     </DialogContentText>
                 </DialogContent>
             </Dialog>

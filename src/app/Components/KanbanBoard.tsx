@@ -20,8 +20,12 @@ import TrelloPng from '../Icons/Trello_logo.svg.png'
 import { AccountMenu, MenuListComposition } from './AccountMenu';
 import AlertDialogSlide from './Dialog';
 
-
-
+interface userProp {
+    columns: Column[]
+    tasks: Task[]
+    email: string
+    name: string
+}
 
 
 function KanbanBoard() {
@@ -33,10 +37,12 @@ function KanbanBoard() {
     const [task, setTasks] = useState<Task[]>([])
     const [activeColumn, setActiveColumn] = useState<Column | null>()
     const [activeTask, setActiveTask] = useState<Task | null>()
-    const [currentUser, setCurrentUser] = useState<any>(null)
+    const [currentUser, setCurrentUser] = useState<userProp | null>(null)
     const [userId, setUserId] = useState<string | null>()
     const [isDragging , setIsDragging] = useState(false)
 
+
+    console.log(currentUser)
     const router = useRouter()
 
     useEffect(() => {

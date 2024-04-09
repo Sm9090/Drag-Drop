@@ -12,16 +12,21 @@ import { Typography } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: React.ReactElement<HTMLDivElement>;
     },
     ref: React.Ref<unknown>,
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({ createColumn }: any) {
+
+interface columnProp {
+    createColumn : (text: string) => void;
+}
+
+export default function AlertDialogSlide({ createColumn }: columnProp) {
     const [open, setOpen] = React.useState(false);
-    const [text, setText] = React.useState<string | undefined>(undefined)
+    const [text, setText] = React.useState<string>('')
 
     const handleClickOpen = () => {
         setOpen(true);

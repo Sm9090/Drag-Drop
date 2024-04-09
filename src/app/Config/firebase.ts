@@ -44,8 +44,12 @@ export async function Register(values: Props) {
             email
         });
         console.log('added in database ', uid)
-    } catch (e: any) {
-        console.log(e.message)
+    } catch (e: unknown) {
+        if (e instanceof Error) {
+            toast.error(e.message);
+        } else {
+            toast.error("An unknown error occurred.");
+        }
     }
 }
 
@@ -55,7 +59,7 @@ export async function SignIn(values: Login) {
 }
 
 
-export const getUser = async (uid: any) => {
+export const getUser = async (uid: string) => {
     const userRef = ref(db, `users/${uid}`);
     const userSnap = await get(userRef);
     if (userSnap.exists()) {
@@ -72,8 +76,13 @@ export const resetPassword = async (email:string) => {
     try{
     await sendPasswordResetEmail(auth, email)  
         toast.success("Check Your Email")
-       }catch(e:any){
+       }catch(e:unknown){
+        if(e instanceof Error){
         toast.error(e.message)
+        }else {
+            // Handle other types of errors
+            toast.error("An unknown error occurred.");
+        }
        }
 }
 

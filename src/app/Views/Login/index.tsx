@@ -37,11 +37,17 @@ export default function Login() {
             try {
                 setLoader(true)
                 await SignIn(values)
-                toast.success('Login Sucessfully')
+                toast.success("Login Sucessfully you i'll redirect to Home page in few Seconds")
                 router.push('/Views/Home')
-            } catch (error: any) {
-                setLoader(false)
-                toast.error(error.message)
+            } catch (error: unknown) {
+                setLoader(false);
+                if (error instanceof Error) {
+                    // 'error' is now recognized as type 'Error'
+                    toast.error(error.message);
+                } else {
+                    // Handle other types of errors
+                    toast.error("An unknown error occurred.");
+                }
             }
         }
     })

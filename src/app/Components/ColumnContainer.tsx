@@ -1,13 +1,12 @@
 'use client'
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import PlusIcon from '../Icons/plusIcon'
 import React, { useMemo, useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+
 
 
 import { Column, Id, Task } from './types/types'
+import PlusIcon from '../Icons/plusIcon'
 import TrashIcon from '../Icons/trashIcon'
 import TaskContainer from './TaskContainer'
 
@@ -20,7 +19,6 @@ interface Props {
     createTask: (columnId: Id) => void;
     updateTask: (id: Id, content: string) => void
     task: Task[]
-
 }
 
 function ColumnContainer(props: Props) {
@@ -31,7 +29,7 @@ function ColumnContainer(props: Props) {
         return task.map(task => task.id)
     }, [task])
 
-    const { setNodeRef, attributes, listeners, transform, transition, isDragging }: any = useSortable({
+    const { setNodeRef, attributes, listeners, transform, transition, isDragging }= useSortable({
         id: column.id,
         data: {
             type: "Column",
@@ -77,8 +75,8 @@ function ColumnContainer(props: Props) {
 
     }
 
-    function handleBlurOrKeyDown(e: any) {
-        if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
+    function handleBlurOrKeyDown(e: React.ChangeEvent<HTMLInputElement> |  React.KeyboardEvent<HTMLInputElement>) {
+        if (e.type === 'blur' || (e.type === 'keydown' && (e as React.KeyboardEvent).key === 'Enter')) {
             const newTitle = e.currentTarget.value.trim();
 
             if (newTitle === "") {

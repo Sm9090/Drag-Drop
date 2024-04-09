@@ -40,9 +40,13 @@ export default function SignUp() {
           await Register(values);
           toast.success('Registered Successfully');
           router.push('/Views/Login');
-        } catch (e:any) {
+        } catch (e:unknown) {
+          if(e instanceof Error){
           toast.error(e.message);
           setLoader(false)
+          }else{
+            toast.error("An unknown error occurred")
+          }
         }
         action.resetForm()
       }

@@ -1,4 +1,4 @@
-import { useState ,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 
@@ -11,11 +11,25 @@ interface Props {
     updateTask: (id: Id, content: string) => void
 }
 
-function TaskContainer({ task, deleteTask, updateTask  }: Props) {
+interface SortableProperties {
+    setNodeRef: (node: HTMLElement | null) => void;
+    attributes: {
+        style: React.CSSProperties;
+    };
+    listeners: {
+        onMouseDown: (event: React.MouseEvent) => void;
+        onTouchStart: (event: React.TouchEvent) => void;
+    };
+    transform: string;
+    transition: string;
+    isDragging: boolean;
+}
+
+function TaskContainer({ task, deleteTask, updateTask }: Props) {
 
     const [mouseOver, setMouseOver] = useState(false)
     const [editMode, setEditMode] = useState(false)
-    const [taskTitle ,setTaskTitle] = useState<string>(task.content)
+    const [taskTitle, setTaskTitle] = useState<string>(task.content)
 
 
     const [isMobileView, setIsMobileView] = useState(false);
@@ -37,7 +51,7 @@ function TaskContainer({ task, deleteTask, updateTask  }: Props) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const { setNodeRef, attributes, listeners, transform, transtition, isDragging }: any = useSortable({
+    const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: task.id,
         data: {
             type: "Task",
@@ -48,10 +62,10 @@ function TaskContainer({ task, deleteTask, updateTask  }: Props) {
 
     console.log(task)
 
-    const style  = {
-        transtition,
+    const style = {
+        transition,
         transform: CSS.Transform.toString(transform),
-        
+
     }
 
     if (isDragging) {
@@ -72,30 +86,30 @@ function TaskContainer({ task, deleteTask, updateTask  }: Props) {
         setEditMode(true)
         setMouseOver(false)
     }
-    function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>){
+    function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         const newTitle = e.target.value
         setTaskTitle(newTitle)
-   
-        if(newTitle === ""){
-           updateTask(task.id , task.content)
-        } else{
-           updateTask(task.id , newTitle)
+
+        if (newTitle === "") {
+            updateTask(task.id, task.content)
+        } else {
+            updateTask(task.id, newTitle)
         }
         toggleEditMode()
-   
-       }
 
-       function handleBlurOrKeyDown(e: any) {
-        if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
+    }
+
+    function handleBlurOrKeyDown(e: React.FocusEvent<HTMLTextAreaElement> | React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (e.type === 'blur' || (e.type === 'keydown' && (e as React.KeyboardEvent).key === 'Enter')) {
             const newTitle = e.currentTarget.value;
 
-            if(newTitle === ""){
+            if (newTitle === "") {
                 setTaskTitle(task.content)
-                updateTask(task.id , task.content)
-             } else{
+                updateTask(task.id, task.content)
+            } else {
                 setTaskTitle(task.content)
-                updateTask(task.id , newTitle)
-             }
+                updateTask(task.id, newTitle)
+            }
 
             toggleEditMode()
             setEditMode(false)
@@ -103,7 +117,7 @@ function TaskContainer({ task, deleteTask, updateTask  }: Props) {
     }
 
 
-   
+
     // task.id, e.target.value
     if (editMode) {
         return <div onClick={toggleEditMode}
@@ -139,7 +153,7 @@ function TaskContainer({ task, deleteTask, updateTask  }: Props) {
             }} className="opacity-60 hover:opacity-100" >
                 <div className={mouseOver || isMobileView ? 'block' : 'hidden'}>
                     <TrashIcon />
-                    </div>
+                </div>
             </button >
         </div>
     )

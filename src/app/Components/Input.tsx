@@ -2,18 +2,25 @@
 import { useEffect, useState } from 'react';
 import React from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { button } from '@material-tailwind/react';
+
+
+interface item{
+    title: string   ,
+    id: string | number ,
+}
 
 interface InputProps {
     onAddItem: (text: string, selectedOption: string) => void;
-    columnTitle: any
+    columnTitle: item[];
 }
 
 function Input({ onAddItem  , columnTitle}: InputProps) {
     const [toggleMenu, setToggleMenu] = useState<boolean>(false)
     const [text, setText] = useState<string>("")
     const [selectedOption, setSelectedOption] = useState<string>("")
-    const [columnsTitle ,setColumnsTitle] = useState([])
+    const [columnsTitle ,setColumnsTitle] = useState<item[]>([])
+
+    console.log(columnTitle)
 
     
     useEffect(()=>{
@@ -47,7 +54,10 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
         setToggleMenu(false)
     }
 
-    const handleOutsideClick = (event : any) =>{
+    const handleOutsideClick = (event : MouseEvent) =>{
+
+        if (!(event.target instanceof Element)) return; 
+
         if (event.target.closest(".dropdown-wrapper") === null) {
             setToggleMenu(false);
           }
@@ -71,7 +81,7 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
                             {selectedOption}
                             <ArrowDropDownIcon />
                         </button> :
-                        <button onClick={handleMenu} className='w-8 border-l border-l-gray-400' autoFocus>
+                        <button onClick={handleMenu} className='w-8 border-l border-l-gray-400 outline-none' autoFocus>
                             <ArrowDropDownIcon />
                         </button>
 }
@@ -83,7 +93,7 @@ function Input({ onAddItem  , columnTitle}: InputProps) {
                 {toggleMenu &&
                     <div className='relative w-full '>
                        {columnTitle.length >= 1 &&  <ul className='absolute right-0  p-2 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                           { columnsTitle.map((col:any , index:number) => {
+                           { columnsTitle.map((col , index) => {
                                 return <li key={index} onClick={() => { handleOptionSelect(col.title) }} className='border-b-2 mb-1 p-2 text-sm hover:bg-gray-100 rounded-md'>{col.title}</li>
                             })}
                         </ul>}
