@@ -13,7 +13,7 @@ import { LoginSchema } from "@/app/Config/schemas"
 import ResetDialogSlide from "@/app/Components/ResetDialog"
 
 
-import TrelloPng from '../../Icons/Trello_logo.svg.png'
+import TrelloPng from '../../../../public/trello_logo.png'
 import toast from "react-hot-toast"
 
 

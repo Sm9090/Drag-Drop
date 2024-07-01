@@ -60,7 +60,6 @@ function TaskContainer({ task, deleteTask, updateTask }: Props) {
         disabled: editMode
     })
 
-    console.log(task)
 
     const style = {
         transition,

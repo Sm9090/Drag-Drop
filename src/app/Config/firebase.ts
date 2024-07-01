@@ -72,7 +72,6 @@ export const getUser = async (uid: string) => {
 }
 
 export const resetPassword = async (email:string) => {
-    console.log(email)
     try{
     await sendPasswordResetEmail(auth, email)  
         toast.success("Check Your Email")

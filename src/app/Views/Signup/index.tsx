@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { SignupSchema } from "@/app/Config/schemas"
 import Image from "next/image"
 import Link from "next/link"
-import TrelloPng from '../../Icons/Trello_logo.svg.png'
+import TrelloPng from '../../../../public/trello_logo.png'
 
 
 
@@ -52,9 +52,6 @@ export default function SignUp() {
       }
       
     })
-
-    console.log("isValid" , isValid)
-    console.log("dirty" ,dirty)
    
     return (
       <>

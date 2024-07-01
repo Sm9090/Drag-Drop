@@ -16,7 +16,7 @@ import ColumnContainer from './ColumnContainer'
 import TaskContainer from './TaskContainer';
 import Input from './Input';
 import { auth, db } from '../Config/firebase';
-import TrelloPng from '../Icons/Trello_logo.svg.png'
+import TrelloPng from '../../../public/trello_logo.png'
 import { AccountMenu, MenuListComposition } from './AccountMenu';
 import AlertDialogSlide from './Dialog';
 
@@ -41,8 +41,6 @@ function KanbanBoard() {
     const [userId, setUserId] = useState<string | null>()
     const [isDragging , setIsDragging] = useState(false)
 
-
-    console.log(currentUser)
     const router = useRouter()
 
     useEffect(() => {
@@ -67,8 +65,6 @@ function KanbanBoard() {
         });
         return () => loggedUser();
     }, []);
-
-    console.log(columns)
 
     useEffect(() => {
         const saveData = async () => {
@@ -134,7 +130,6 @@ function KanbanBoard() {
             id: uuidv4(), columnId,
             content: `Task ${task.length + 1}`
         }
-        console.log(columnId)
         setTasks([...task, newTask])
     }
 
@@ -167,7 +162,6 @@ function KanbanBoard() {
     }
 
     function onDragStart(event: DragStartEvent) {
-        console.log("DragStart", event)
         if (event.active.data.current?.type === 'Column') {
             setActiveColumn(event.active.data.current.column)
             return;
@@ -247,7 +241,6 @@ function KanbanBoard() {
                 const activeIndex = task.findIndex(t => t.id === activeId)
 
                 task[activeIndex].columnId = overId;
-                console.log("DROPPING TASK OVER COLUMN", { activeIndex });
                 return arrayMove(task, activeIndex, activeIndex);
 
             })
