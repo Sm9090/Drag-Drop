@@ -99,7 +99,7 @@ function ColumnContainer(props: Props) {
                 <div className='flex justify-between p-2 m-2 cursor-grab border-b border-gray-100' {...attributes} {...listeners}>
                     <div className='flex gap-2'>
                         <div onClick={handleEditing}>
-                            {editMode ? <input className='bg-white px-2 py-1 rounded-lg  outline-blue-400' type="text"
+                            {editMode ? <input className=' text-black bg-white px-2 py-1 rounded-lg  outline-blue-400' type="text"
                                 value={columnTitleText}
                                 onChange={handleTitleChange}
                                 autoFocus onBlur={handleBlurOrKeyDown} onKeyDown={handleBlurOrKeyDown} />
@@ -133,7 +133,7 @@ function ColumnContainer(props: Props) {
                         onClick={() => {
                             createTask(column.id)
                         }}
-                        className='flex gap-2 items-center  justify-center'>
+                        className='flex gap-2 items-center  justify-center text-black'>
                         <PlusIcon />
                         Add Task
                     </button>
